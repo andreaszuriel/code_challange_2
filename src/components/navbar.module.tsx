@@ -26,7 +26,7 @@ export default function Navbar() {
     if (auth?.isAuthenticated) {
       auth.refreshUser();
     }
-  }, [auth, auth?.userToken]); // Fixed dependency array
+  }, [auth, auth?.userToken]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -273,32 +273,5 @@ export default function Navbar() {
         </div>
       )}
     </>
-  );
-}
-
-function InputField({
-  label,
-  value,
-  onChange,
-  disabled,
-}: {
-  label: string;
-  value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-}) {
-  return (
-    <div className="w-full">
-      <label className="label block text-gray-600">{label}</label>
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        className={`input mt-2 w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-accent ${
-          disabled ? "cursor-not-allowed opacity-60" : "focus:ring-blue-500"
-        }`}
-      />
-    </div>
   );
 }

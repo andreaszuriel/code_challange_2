@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormRegister, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   applicationSchema,
@@ -23,6 +23,7 @@ export default function JobApplicationForm() {
     formState: { errors },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
+    shouldUnregister: true,
   });
 
   const confirmSubmission = async () => {
@@ -32,12 +33,13 @@ export default function JobApplicationForm() {
     setLoading(true);
 
     try {
+      // Convert form data to Backendless object
       const applicationData = {
         ...formData,
         preferredName: formData.preferredName || null,
       };
 
-      await Backendless.Data.of("apply").save(applicationData);
+      await Backendless.Data.of("Applications").save(applicationData);
 
       toast.success("Your application has been submitted successfully!", {
         position: "top-right",
@@ -52,7 +54,11 @@ export default function JobApplicationForm() {
       reset();
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("Failed to submit application. Please try again.");
+      toast.error(
+        `Failed to submit application: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setLoading(false);
     }
@@ -67,7 +73,6 @@ export default function JobApplicationForm() {
 
         <form
           onSubmit={handleSubmit((data) => {
-            console.log("Form Data:", data);
             setFormData(data);
             setShowConfirm(true);
           })}
@@ -91,6 +96,7 @@ export default function JobApplicationForm() {
             label="Preferred Name (Optional)"
             name="preferredName"
             register={register}
+            error={errors.preferredName}
           />
           <InputField
             label="Email"
@@ -145,22 +151,11 @@ export default function JobApplicationForm() {
             required
           />
 
-          <FileInputField
-            label="Resume (PDF only)"
-            name="resume"
-            register={register}
-          />
-          <FileInputField
-            label="Cover Letter (PDF only)"
-            name="coverLetter"
-            register={register}
-          />
-
-          {/* ✅ Centered Submit Button with max-w-3xl */}
           <div className="col-span-full flex justify-center">
             <button
               type="submit"
               className="w-full max-w-3xl py-3 text-lg bg-[#7c8a5a] text-white rounded-md font-semibold hover:bg-[#6a784a] transition-all duration-300 transform hover:-translate-y-1 shadow-lg mt-8"
+              disabled={loading}
             >
               {loading ? "Submitting..." : "Submit Application"}
             </button>
@@ -168,7 +163,6 @@ export default function JobApplicationForm() {
         </form>
       </div>
 
-      {/* ✅ Styled Confirmation Box with Equal-Sized Buttons */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="card p-6 text-center max-w-xs sm:max-w-sm md:max-w-md w-full">
@@ -198,7 +192,15 @@ export default function JobApplicationForm() {
   );
 }
 
-/* ✅ InputField Component */
+interface InputFieldProps {
+  label: string;
+  name: keyof ApplicationFormValues;
+  type?: string;
+  register: UseFormRegister<ApplicationFormValues>;
+  error?: FieldError;
+  required?: boolean;
+}
+
 function InputField({
   label,
   name,
@@ -206,11 +208,12 @@ function InputField({
   register,
   error,
   required = false,
-}: any) {
+}: InputFieldProps) {
   return (
     <div className="col-span-1">
       <label className="block text-sm font-medium text-[#7c8a5a]">
         {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <input
         {...register(name, { required })}
@@ -218,23 +221,6 @@ function InputField({
         className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-accent focus:border-accent"
       />
       {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
-    </div>
-  );
-}
-
-/* ✅ FileInputField Component */
-function FileInputField({ label, name, register }: any) {
-  return (
-    <div className="col-span-1">
-      <label className="block text-sm font-medium text-[#7c8a5a]">
-        {label}
-      </label>
-      <input
-        {...register(name)}
-        type="file"
-        accept=".pdf"
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-accent focus:border-accent"
-      />
     </div>
   );
 }

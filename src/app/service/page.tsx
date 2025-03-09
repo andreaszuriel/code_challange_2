@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Image from "next/image";
 
 interface Content {
   quote: string;
@@ -195,12 +196,14 @@ export default function ServicesPage() {
               className="w-[90%] sm:w-[500px] lg:w-[600px] h-[450px]"
             >
               {images.map((src, index) => (
-                <div key={index} className="rounded-xl overflow-hidden shadow-lg">
-                  <img
+                <div key={index} className="rounded-xl overflow-hidden shadow-lg relative h-[450px]">
+                  <Image
                     src={src}
                     alt={`Green Energy ${index + 1}`}
-                    className="object-cover w-full h-[450px] rounded-xl"
+                    fill
+                    className="object-cover rounded-xl"
                     loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
               ))}

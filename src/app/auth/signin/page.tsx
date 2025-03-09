@@ -12,6 +12,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { FcGoogle } from "react-icons/fc";
 import { FaLinkedin } from "react-icons/fa";
 
+interface LoginResponse {
+  "user-token": string;
+  objectId: string;
+}
+
 export default function SignIn() {
     const router = useRouter();
     const auth = useContext(AuthContext);
@@ -22,12 +27,11 @@ export default function SignIn() {
 
     async function onSubmit(data: SignInForm) {
         try {
-            interface LoginResponse {
-                "user-token": string;
-                objectId: string;
-            }
-
-            const response = await Backendless.UserService.login(data.email, data.password, true) as LoginResponse;
+            const response = await Backendless.UserService.login<LoginResponse>(
+                data.email, 
+                data.password, 
+                true
+            );
 
             if (!response["user-token"] || !response.objectId) {
                 throw new Error("No user token or ID received");
@@ -36,8 +40,11 @@ export default function SignIn() {
             auth?.login(response["user-token"], response.objectId);
             toast.success("✅ Sign in successful!", { autoClose: 2000 });
             router.push("/user/dashboard");
-        } catch (error: any) {
-            toast.error(error.code === 3003 ? "❌ Invalid login credentials" : `⚠️ Sign in failed: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? 
+                (error.message.includes("3003") ? "❌ Invalid login credentials" : `⚠️ Sign in failed: ${error.message}`) : 
+                "⚠️ An unknown error occurred";
+            toast.error(errorMessage);
         }
     }
 
@@ -75,7 +82,7 @@ export default function SignIn() {
                 </form>
                 
                 <p className="text-center text-[#f5f5dc] text-lg sm:text-base font-medium mt-4">
-                    Don't have an account? {" "}
+                    Don&apos;t have an account? {" "}
                     <a href="/auth/signup" className="text-[#7c8a5a] hover:underline font-semibold">Sign Up</a>
                 </p>
             </div>

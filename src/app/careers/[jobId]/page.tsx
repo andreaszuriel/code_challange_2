@@ -47,8 +47,9 @@ export default function JobDetailsPage() {
           jobId as string
         );
         setJob(response);
-      } catch (err: any) {
-        setError(`Failed to load job details: ${err.message}`);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+        setError(`Failed to load job details: ${errorMessage}`);
       } finally {
         setLoading(false);
       }
@@ -61,17 +62,13 @@ export default function JobDetailsPage() {
   if (error) return <p className="text-error">{error}</p>;
   if (!job) return <p>Job not found.</p>;
 
-  // Helper function to split the text into an array by new lines
   const splitTextToList = (text: string) => {
     return text.split("\n").map((line, index) => <li key={index}>{line}</li>);
   };
 
   return (
     <div className="container mx-auto p-6 mt-20 pb-24">
-      {" "}
-      {/* Added padding bottom */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Job Details Section */}
         <div className="col-span-1 lg:col-span-2 card p-6">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             {job.position}
@@ -132,7 +129,6 @@ export default function JobDetailsPage() {
           </p>
         </div>
 
-        {/* Right grid section with hiring manager info and apply button */}
         <div className="col-span-1 lg:col-span-1 card h-fit p-6">
           <h2 className="text-xl font-semibold mb-6">
             Contact the Hiring Manager

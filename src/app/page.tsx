@@ -71,7 +71,7 @@ export default function Home() {
             className="w-full h-full object-cover"
             aria-label="Sustainable energy solutions in action"
           >
-            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+            <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
         </div>
         
@@ -79,7 +79,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl md:text-7xl font-bold mb-6 text-[#8d9c6a]">
               Powering Tomorrow <br className="hidden md:block" />
-              <span className="text-[#76c7c0]">With Today's Green Tech</span>
+              <span className="text-[#76c7c0]">With Today&apos;s Green Tech</span>
             </h1>
             <div className="mt-12 space-x-6">
               <Link href="/service" className="button button-primary py-4 px-8 text-lg">
@@ -178,7 +178,7 @@ export default function Home() {
                 Pioneering Green Tech Since 2015
               </h2>
               <p className="text-lg text-[#8d9c6a]/90">
-                From humble beginnings to global sustainability leaders, we're committed to 
+                From humble beginnings to global sustainability leaders, we&apos;re committed to 
                 revolutionizing energy consumption through innovation and integrity.
               </p>
               

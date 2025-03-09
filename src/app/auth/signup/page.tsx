@@ -12,7 +12,6 @@ import { FaLinkedin } from "react-icons/fa";
 import { signUpSchema, SignUpForm } from "@/lib/validator/signup.schema";
 import Link from "next/link";
 
-// Fix: Extend Backendless User Type
 type BackendlessUser = {
     objectId: string;
     "user-token": string;
@@ -35,14 +34,11 @@ export default function SignUp() {
             const newUser = await Backendless.UserService.register(data);
             console.log("User registered:", newUser);
 
-            // Fix: Ensure correct typing for Backendless login response
             const loginResponse = await Backendless.UserService.login(
                 data.email,
                 data.password,
                 true
             ) as BackendlessUser;
-
-            console.log("Login Response:", loginResponse);
 
             if (!loginResponse["user-token"] || !loginResponse.objectId) {
                 throw new Error("Login after sign-up failed");
@@ -52,9 +48,12 @@ export default function SignUp() {
 
             toast.success("Sign-up successful! Redirecting...");
             router.push("/user/dashboard");
-        } catch (error: any) {
+        } catch (error) {
             console.error("Signup Error:", error);
-            const errorMessage = error?.message || "Failed to sign up. Please try again.";
+            
+            const errorMessage = error instanceof Error 
+                ? error.message
+                : "Failed to sign up. Please try again.";
 
             if (errorMessage.includes("User already exists")) {
                 toast.error("Email is already in use. Please use a different email.");

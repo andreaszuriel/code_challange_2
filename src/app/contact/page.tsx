@@ -16,7 +16,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    email: "", 
+    subject: "", 
+    message: "" 
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,10 +36,10 @@ export default function ContactPage() {
         position: "top-right",
         autoClose: 3000,
       });
-
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
-      toast.error("Failed to send message. Please try again.", {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+      toast.error(`Failed to send message: ${errorMessage}`, {
         position: "top-right",
         autoClose: 3000,
       });

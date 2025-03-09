@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
+import Image from "next/image";
 import Backendless from "@/lib/backendless";
 
 interface Career {
@@ -25,6 +26,15 @@ export default function CareersPage() {
   const [filters, setFilters] = useState({ category: "", jobType: "", location: "", region: "" });
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
+  // Memoize saveState with useCallback
+  const saveState = useCallback(() => {
+    localStorage.setItem("careersState", JSON.stringify({
+      search,
+      filters,
+      sortOrder
+    }));
+  }, [search, filters, sortOrder]);
+
   // Load state from localStorage
   useEffect(() => {
     const savedState = JSON.parse(localStorage.getItem("careersState") || "{}");
@@ -33,23 +43,14 @@ export default function CareersPage() {
     setSortOrder(savedState.sortOrder || "newest");
   }, []);
 
-  // Save state to localStorage
-  const saveState = () => {
-    localStorage.setItem("careersState", JSON.stringify({
-      search,
-      filters,
-      sortOrder
-    }));
-  };
-
   useEffect(() => {
     const fetchCareers = async () => {
       try {
         const response = await Backendless.Data.of("Careers").find<Career>();
         setCareers(response);
         setFilteredCareers(response);
-      } catch (err: any) {
-        setError(`Failed to load careers: ${err.message}`);
+      } catch (err: unknown) {
+        setError(`Failed to load careers: ${err instanceof Error ? err.message : "Unknown error"}`);
       } finally {
         setLoading(false);
       }
@@ -79,7 +80,7 @@ export default function CareersPage() {
 
     setFilteredCareers(filtered);
     saveState();
-  }, [search, filters, careers, sortOrder]);
+  }, [search, filters, careers, sortOrder, saveState]); // Added saveState to dependencies
 
   const clearFilters = () => {
     setSearch("");
@@ -97,14 +98,18 @@ export default function CareersPage() {
       </Head>
       
       <div className="container mx-auto p-6 pb-20">
-        {/* Hero Section */}
+        {/* Hero Section - Replaced img with Next/Image */}
         <div className="relative h-[70vh] w-full mt-16 mb-12">
-          <img
-            src="/images/work.jpg"
-            alt="Work Environment"
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
+          <div className="w-full h-full">
+            <Image
+              src="/images/work.jpg"
+              alt="Work Environment"
+              fill
+              className="object-cover"
+              loading="lazy"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 text-center text-[#7c8a5a]">
