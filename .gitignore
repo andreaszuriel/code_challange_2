@@ -51,8 +51,7 @@ node_modules/
 .next/
 .qodo/
 
-# Ignore sensitive files
-src/lib/backendless.ts
+
 
 # Ignore system files
 .DS_Store
