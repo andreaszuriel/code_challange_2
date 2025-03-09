@@ -11,10 +11,10 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [scrolling, setScrolling] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false); // for the mobile menu
+  const [menuOpen, setMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
   const router = useRouter();
-  const pathname = usePathname(); // Get the current route path
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolling(window.scrollY > 50);
@@ -26,12 +26,11 @@ export default function Navbar() {
     if (auth?.isAuthenticated) {
       auth.refreshUser();
     }
-  }, [auth?.userToken]);
+  }, [auth, auth?.userToken]); // Fixed dependency array
 
-  // Close mobile menu when route changes
   useEffect(() => {
-    setMenuOpen(false); // Close the menu whenever the route changes
-  }, [pathname]); // Re-run this effect when the pathname changes
+    setMenuOpen(false);
+  }, [pathname]);
 
   const handleSignOut = () => {
     setShowConfirm(true);
@@ -75,7 +74,6 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Mobile Username and Menu Button */}
           <div className="md:hidden flex items-center ml-auto space-x-2">
             {auth?.isAuthenticated && (
               <span className="text-xs text-white">
@@ -87,10 +85,8 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {menuOpen && (
             <>
-              {/* Overlay to close menu when clicked outside */}
               <div
                 className="fixed inset-0 bg-black/50 z-40"
                 onClick={closeMenu}
@@ -173,7 +169,6 @@ export default function Navbar() {
             </>
           )}
 
-          {/* Desktop Navigation */}
           <ul className="hidden md:flex space-x-6 text-lg">
             <li>
               <Link href="/about" className="hover:text-gray-300">
@@ -197,7 +192,6 @@ export default function Navbar() {
             </li>
           </ul>
 
-          {/* Dropdown for Profile on Desktop */}
           <div className="relative flex items-center space-x-2 hidden md:flex">
             {auth?.isAuthenticated && (
               <span className="text-lg font-semibold">
@@ -255,7 +249,6 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Confirmation Modal for Sign Out */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-[#1a1a1a] p-6 rounded-lg shadow-lg text-center max-w-xs sm:max-w-sm md:max-w-md w-full">
@@ -280,5 +273,32 @@ export default function Navbar() {
         </div>
       )}
     </>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  value: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="w-full">
+      <label className="label block text-gray-600">{label}</label>
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        className={`input mt-2 w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-accent ${
+          disabled ? "cursor-not-allowed opacity-60" : "focus:ring-blue-500"
+        }`}
+      />
+    </div>
   );
 }

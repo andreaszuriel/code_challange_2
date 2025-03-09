@@ -61,8 +61,8 @@ export default function Page() {
           ...new Set(response.map((product) => product.category)),
         ];
         setCategories(uniqueCategories);
-      } catch (err: any) {
-        setError("Failed to fetch products: " + err.message);
+      } catch (err: unknown) {
+        setError("Failed to fetch products: " + (err instanceof Error ? err.message : 'Unknown error'));
       } finally {
         setLoading(false);
       }

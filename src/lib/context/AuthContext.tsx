@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, ReactNode, useCallback } from "react";
 import Cookies from "js-cookie";
 import Backendless from "@/lib/backendless";
 
@@ -11,10 +11,10 @@ interface User {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  userToken: string | null; // for navbar compatibility
-  authToken: string | null; // for user profile compatibility
-  objectId: string | null; // for navbar compatibility
-  userId: string | null; // for user profile compatibility
+  userToken: string | null;
+  authToken: string | null;
+  objectId: string | null;
+  userId: string | null;
   username: string | null;
   login: (token: string, userId: string) => void;
   logout: () => void;
@@ -31,9 +31,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
 
-  // Fetch user details (for navbar display)
-  const refreshUser = async () => {
-    if (!userId) return; // Only fetch if userId is available
+  // Fetch user details with useCallback to memoize the function
+  const refreshUser = useCallback(async () => {
+    if (!userId) return;
 
     try {
       const user = (await Backendless.Data.of("Users").findById(userId)) as User;
@@ -42,9 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error("Failed to fetch user data:", error);
-      // Don't force logout immediately, just log the error
     }
-  };
+  }, [userId]); // Add userId as dependency
 
   useEffect(() => {
     const token = Cookies.get("userToken") || Cookies.get("authToken") || null;
@@ -59,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserId(storedUserId);
       refreshUser(); // Fetch latest username
     }
-  }, []);
+  }, [refreshUser]); // Add refreshUser to dependency array
 
   const login = (token: string, userId: string) => {
     Cookies.set("userToken", token, { expires: 7 });
@@ -72,12 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthToken(token);
     setObjectId(userId);
     setUserId(userId);
-    refreshUser(); // Fetch username after login
+    refreshUser();
   };
 
   const logout = async () => {
     try {
-      await Backendless.UserService.logout(); // Ensure Backendless logs out the user
+      await Backendless.UserService.logout();
     } catch (error) {
       console.error("Backendless logout failed:", error);
     }

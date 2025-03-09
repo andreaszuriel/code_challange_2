@@ -15,6 +15,16 @@ interface UserProfile {
   email: string;
 }
 
+// Interface for Backendless user response
+interface BackendlessUser {
+  objectId: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  [key: string]: unknown; // Allow other properties without using any
+}
+
 export default function UserProfilePage() {
   const auth = useContext(AuthContext);
   const router = useRouter();
@@ -37,10 +47,8 @@ export default function UserProfilePage() {
 
     const fetchUserData = async () => {
       try {
-        const response =
-          (await Backendless.UserService.getCurrentUser()) as any;
-        if (!response || !response.objectId)
-          throw new Error("User data not found");
+        const response = await Backendless.UserService.getCurrentUser() as BackendlessUser;
+        if (!response?.objectId) throw new Error("User data not found");
 
         setUser({
           objectId: response.objectId,

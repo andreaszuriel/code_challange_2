@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
       <footer
         className={`fixed bottom-0 left-0 w-full text-white p-4 transition-all duration-300 ${
           isVisible ? "opacity-100" : "opacity-0"
-        } md:block`} 
+        } md:block`}
         style={{
           backgroundColor: "#811f34", 
           transition: "opacity 0.5s ease",
@@ -35,16 +35,15 @@ const Footer: React.FC = () => {
       >
         <div className="flex justify-between items-center px-6">
           <p className="text-md">
-            {" "}
-            This website is for learning purposes only, I don't have the right
+            This website is for learning purposes only, I don&apos;t have the right
             for the images or videos that I use.
           </p>
           <div>
             <Image
               src="/images/solterra.png"
               alt="Logo"
-              width={80}  
-              height={80} 
+              width={80}
+              height={80}
             />
           </div>
         </div>
