@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { AuthContext } from "@/lib/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
@@ -31,6 +30,10 @@ export default function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
 
   const handleSignOut = () => {
     setShowConfirm(true);
@@ -64,7 +67,10 @@ export default function Navbar() {
         transition={{ type: "spring", stiffness: 100 }}
       >
         <div className="w-full flex items-center justify-between px-6">
-          <Link href="/" className="flex items-center">
+          <div 
+            onClick={() => handleNavigation("/")} 
+            className="flex items-center cursor-pointer"
+          >
             <Image
               src="/images/solterra.png"
               alt="Solterra Logo"
@@ -72,7 +78,7 @@ export default function Navbar() {
               height={40}
               unoptimized
             />
-          </Link>
+          </div>
 
           <div className="md:hidden flex items-center ml-auto space-x-2">
             {auth?.isAuthenticated && (
@@ -94,46 +100,46 @@ export default function Navbar() {
               <div className="md:hidden fixed top-16 inset-x-0 bottom-0 bg-black/90 text-white flex flex-col items-center justify-center z-50">
                 <ul className="flex flex-col space-y-6 text-center">
                   <li>
-                    <Link
-                      href="/about"
-                      className="text-2xl hover:text-gray-300"
+                    <span
+                      onClick={() => handleNavigation("/about")}
+                      className="text-2xl hover:text-gray-300 cursor-pointer"
                     >
                       About Us
-                    </Link>
+                    </span>
                   </li>
                   <li>
-                    <Link
-                      href="/service"
-                      className="text-2xl hover:text-gray-300"
+                    <span
+                      onClick={() => handleNavigation("/service")}
+                      className="text-2xl hover:text-gray-300 cursor-pointer"
                     >
                       Services
-                    </Link>
+                    </span>
                   </li>
                   <li>
-                    <Link
-                      href="/teams"
-                      className="text-2xl hover:text-gray-300"
+                    <span
+                      onClick={() => handleNavigation("/teams")}
+                      className="text-2xl hover:text-gray-300 cursor-pointer"
                     >
                       Teams
-                    </Link>
+                    </span>
                   </li>
                   <li>
-                    <Link
-                      href="/contact"
-                      className="text-2xl hover:text-gray-300"
+                    <span
+                      onClick={() => handleNavigation("/contact")}
+                      className="text-2xl hover:text-gray-300 cursor-pointer"
                     >
                       Contact
-                    </Link>
+                    </span>
                   </li>
                   {auth?.isAuthenticated ? (
                     <>
                       <li>
-                        <Link
-                          href="/user/dashboard"
-                          className="text-2xl hover:text-gray-300"
+                        <span
+                          onClick={() => handleNavigation("/user/dashboard")}
+                          className="text-2xl hover:text-gray-300 cursor-pointer"
                         >
                           Profile
-                        </Link>
+                        </span>
                       </li>
                       <li>
                         <button
@@ -147,20 +153,20 @@ export default function Navbar() {
                   ) : (
                     <>
                       <li>
-                        <Link
-                          href="/auth/signin"
-                          className="text-2xl hover:text-gray-300"
+                        <span
+                          onClick={() => handleNavigation("/auth/signin")}
+                          className="text-2xl hover:text-gray-300 cursor-pointer"
                         >
                           Sign In
-                        </Link>
+                        </span>
                       </li>
                       <li>
-                        <Link
-                          href="/auth/signup"
-                          className="text-2xl hover:text-gray-300"
+                        <span
+                          onClick={() => handleNavigation("/auth/signup")}
+                          className="text-2xl hover:text-gray-300 cursor-pointer"
                         >
                           Sign Up
-                        </Link>
+                        </span>
                       </li>
                     </>
                   )}
@@ -171,24 +177,36 @@ export default function Navbar() {
 
           <ul className="hidden md:flex space-x-6 text-lg">
             <li>
-              <Link href="/about" className="hover:text-gray-300">
+              <span
+                onClick={() => handleNavigation("/about")}
+                className="hover:text-gray-300 cursor-pointer"
+              >
                 About Us
-              </Link>
+              </span>
             </li>
             <li>
-              <Link href="/service" className="hover:text-gray-300">
+              <span
+                onClick={() => handleNavigation("/service")}
+                className="hover:text-gray-300 cursor-pointer"
+              >
                 Services
-              </Link>
+              </span>
             </li>
             <li>
-              <Link href="/teams" className="hover:text-gray-300">
+              <span
+                onClick={() => handleNavigation("/teams")}
+                className="hover:text-gray-300 cursor-pointer"
+              >
                 Teams
-              </Link>
+              </span>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-gray-300">
+              <span
+                onClick={() => handleNavigation("/contact")}
+                className="hover:text-gray-300 cursor-pointer"
+              >
                 Contact
-              </Link>
+              </span>
             </li>
           </ul>
 
@@ -214,12 +232,12 @@ export default function Navbar() {
               >
                 {auth?.isAuthenticated ? (
                   <>
-                    <Link
-                      href="/user/dashboard"
-                      className="block px-4 py-2 hover:bg-gray-700 rounded"
+                    <span
+                      onClick={() => handleNavigation("/user/dashboard")}
+                      className="block px-4 py-2 hover:bg-gray-700 rounded cursor-pointer"
                     >
                       Profile
-                    </Link>
+                    </span>
                     <button
                       onClick={handleSignOut}
                       className="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-700 rounded"
@@ -229,18 +247,18 @@ export default function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link
-                      href="/auth/signin"
-                      className="block px-4 py-2 hover:bg-gray-700 rounded"
+                    <span
+                      onClick={() => handleNavigation("/auth/signin")}
+                      className="block px-4 py-2 hover:bg-gray-700 rounded cursor-pointer"
                     >
                       Sign In
-                    </Link>
-                    <Link
-                      href="/auth/signup"
-                      className="block px-4 py-2 hover:bg-gray-700 rounded"
+                    </span>
+                    <span
+                      onClick={() => handleNavigation("/auth/signup")}
+                      className="block px-4 py-2 hover:bg-gray-700 rounded cursor-pointer"
                     >
                       Sign Up
-                    </Link>
+                    </span>
                   </>
                 )}
               </motion.div>

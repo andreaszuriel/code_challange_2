@@ -1,6 +1,9 @@
+"use client";
+
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const impactStats = [
   { value: "10M+", label: "Trees Planted" },
@@ -58,6 +61,8 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -82,12 +87,18 @@ export default function Home() {
               <span className="text-[#76c7c0]">With Today&apos;s Green Tech</span>
             </h1>
             <div className="mt-12 space-x-6">
-              <Link href="/service" className="button button-primary py-4 px-8 text-lg">
+              <button 
+                onClick={() => router.push("/service")} 
+                className="button button-primary py-4 px-8 text-lg"
+              >
                 🚀 Explore Solutions
-              </Link>
-              <Link href="/about" className="button button-outline py-4 px-8 text-lg">
+              </button>
+              <button 
+                onClick={() => router.push("/about")} 
+                className="button button-outline py-4 px-8 text-lg"
+              >
                 🌱 Our Mission
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -118,12 +129,12 @@ export default function Home() {
                   <p className="text-[#8d9c6a]">
                     Next-gen {num === 1 ? 'solar' : num === 2 ? 'wind' : 'hybrid'} energy solutions
                   </p>
-                  <Link 
-                    href="/service" 
+                  <button 
+                    onClick={() => router.push("/service")} 
                     className="button button-outline mt-4 w-full text-center py-3"
                   >
                     Learn More →
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}
@@ -192,12 +203,12 @@ export default function Home() {
                 ))}
               </div>
               
-              <Link 
-                href="/about" 
+              <button 
+                onClick={() => router.push("/about")} 
                 className="button button-primary w-full md:w-auto text-center py-4 px-8"
               >
                 🧭 Discover Our Journey →
-              </Link>
+              </button>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
