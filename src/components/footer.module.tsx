@@ -4,15 +4,15 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 const Footer: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isHoverFooterVisible, setIsHoverFooterVisible] = useState(false);
 
   // Detect mouse hover at the bottom of the screen
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (e.clientY >= window.innerHeight - 50) {
-        setIsVisible(true); // Show footer 
+        setIsHoverFooterVisible(true); // Show hover footer
       } else {
-        setIsVisible(false); // Hide footer 
+        setIsHoverFooterVisible(false); // Hide hover footer
       }
     };
 
@@ -24,12 +24,13 @@ const Footer: React.FC = () => {
 
   return (
     <>
+      {/* Hover Footer (Appears when hovering near bottom) */}
       <footer
-        className={`fixed bottom-0 left-0 w-full text-white p-4 transition-all duration-300 ${
-          isVisible ? "opacity-100" : "opacity-0"
+        className={`fixed bottom-0 left-0 w-full text-white p-4 transition-opacity duration-300 ${
+          isHoverFooterVisible ? "opacity-100" : "opacity-0"
         } md:block`}
         style={{
-          backgroundColor: "#811f34", 
+          backgroundColor: "#811f34",
           transition: "opacity 0.5s ease",
         }}
       >
@@ -47,6 +48,20 @@ const Footer: React.FC = () => {
             />
           </div>
         </div>
+      </footer>
+
+      {/* Static Minimal Footer (Always visible at the bottom) */}
+      <footer
+        className="w-full text-white text-center p-4"
+        style={{
+          backgroundColor: "#8d9c6a",
+          position: "static",
+          bottom: 0,
+          left: 0,
+        }}
+      >
+        &copy; {new Date().getFullYear()} Solterra GreenTech. All rights
+        reserved.
       </footer>
     </>
   );

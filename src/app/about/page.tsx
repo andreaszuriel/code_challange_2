@@ -5,14 +5,6 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type TeamMember = {
-  name: string;
-  role: string;
-  img: string;
-  bio: string;
-  slug: string;
-};
-
 export default function AboutPage() {
   const tetradicColors = [
     "#233564",
