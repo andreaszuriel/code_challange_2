@@ -48,7 +48,8 @@ export default function JobDetailsPage() {
         );
         setJob(response);
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
         setError(`Failed to load job details: ${errorMessage}`);
       } finally {
         setLoading(false);
@@ -103,7 +104,7 @@ export default function JobDetailsPage() {
             Compensation and Benefits
           </h2>
 
-          <h3 className="text-xl font-semibold mb-4">Benefit</h3>
+          <h3 className="text-l font-semibold mb-4">Benefit</h3>
           <p className="text-muted">
             As a full-time employee at Solterra GreenTech, you will receive a
             comprehensive benefits package, including:
@@ -112,8 +113,10 @@ export default function JobDetailsPage() {
             {splitTextToList(job.benefit)}
           </ul>
 
-          <h3 className="text-xl font-semibold mt-8 mb-4">Compensation</h3>
-          <p className="text-dark-yellow font-bold">{job.compensation}</p>
+          <h3 className="text-l font-semibold mt-8 mb-4">Compensation</h3>
+          <p style={{ color: "#8be98c", fontWeight: "bold" }}>
+            {job.compensation}
+          </p>
 
           <p className="text-muted mt-8">
             Pay offered may vary depending on multiple factors, including

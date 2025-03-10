@@ -1,12 +1,21 @@
-// next.config.js
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Konfigurasi lain yang sudah ada
   reactStrictMode: true,
   swcMinify: true,
 
-  // Tambahkan konfigurasi images
   images: {
-    domains: ["randomuser.me"], // Izinkan domain gambar
+    domains: [
+      "randomuser.me", 
+      "hanergy.eu",
+      "image.made-in-china.com",
+      "www.solarpowerworldonline.com",
+      "windcycle.energy",
+      "media.dinomarket.com",
+      "encrypted-tbn0.gstatic.com",
+      "marvel-b1-cdn.bc0a.com",
+      "renewablesfirst.co.uk",
+      "www.ecosoftenergy.co.uk"
+    ],
   },
 };
 
