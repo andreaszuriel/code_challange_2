@@ -6,7 +6,6 @@ import Footer from "@/components/footer.module";
 import LoadingPage from "@/components/loading.module";
 import "./globals.css";
 
-// Inisialisasi font
 const orbitron = Orbitron({
   variable: "--font-orbitron",
   subsets: ["latin"],
@@ -19,10 +18,6 @@ const play = Play({
   weight: ["400", "700"],
 });
 
-// Ambil URL dari environment variable atau fallback ke localhost
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://solterragreentech.vercel.app";
-
-// Metadata SEO & Open Graph
 export const metadata: Metadata = {
   title: {
     default: "Solterra GreenTech | Sustainable Technology Solutions",
@@ -30,15 +25,14 @@ export const metadata: Metadata = {
   },
   description: "Pioneering eco-friendly technology solutions for a sustainable future. Discover our green energy innovations and environmental initiatives.",
   keywords: ["green technology", "sustainable energy", "eco-friendly solutions", "renewable resources", "climate tech"],
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   alternates: {
-    canonical: SITE_URL,
+    canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Solterra GreenTech",
-    url: SITE_URL,
     images: [{
       url: "/og-image.jpg",
       width: 1200,
@@ -59,20 +53,15 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
     }
-  },
-  other: {
-    sitemap: `${SITE_URL}/sitemap.xml`,
   }
 };
 
-// Viewport meta settings untuk responsivitas dan tema warna
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: "#0a192f",
 };
 
-// Root Layout Component
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -82,14 +71,14 @@ export default function RootLayout({
         <AuthProvider>
           <LoadingPage>
             <Navbar />
-            <main id="main-content" className="min-h-[calc(100vh-160px)]">
+            <main className="min-h-[calc(100vh-160px)]">
               {children}
             </main>
             <Footer />
           </LoadingPage>
         </AuthProvider>
         
-        {/* Accessibility: Skip Navigation Link */}
+        {/* Accessibility Skip Navigation */}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-emerald-800"

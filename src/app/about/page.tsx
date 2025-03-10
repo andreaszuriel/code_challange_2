@@ -1,9 +1,16 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
+type TeamMember = {
+  name: string;
+  role: string;
+  img: string;
+  bio: string;
+};
 
 export default function AboutPage() {
   const tetradicColors = [
@@ -12,11 +19,27 @@ export default function AboutPage() {
     "#642335",
     "#356423",
   ];
-  const router = useRouter();
 
-  const handleMemberClick = (slug: string) => {
-    router.push(`/team/${slug}`);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+
+  const handleMemberClick = (member: TeamMember) => {
+    setSelectedMember(member);
   };
+
+  const closePopup = () => {
+    setSelectedMember(null);
+  };
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closePopup();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
 
   return (
     <>
@@ -116,21 +139,18 @@ export default function AboutPage() {
                 role: "Founder & CEO",
                 img: "https://randomuser.me/api/portraits/men/1.jpg",
                 bio: "Azriel has over 15 years of experience in renewable energy and is passionate about creating sustainable solutions for the future.",
-                slug: "azriel-schwarz"
               },
               {
                 name: "Jane Smith",
                 role: "Head of Engineering",
                 img: "https://randomuser.me/api/portraits/women/1.jpg",
                 bio: "Jane is an expert in renewable energy systems and has led multiple large-scale solar and wind projects.",
-                slug: "jane-smith"
               },
               {
                 name: "Michael Brown",
                 role: "Sustainability Director",
                 img: "https://randomuser.me/api/portraits/men/2.jpg",
                 bio: "Michael is dedicated to reducing environmental impact and has implemented innovative sustainability initiatives across the company.",
-                slug: "michael-brown"
               },
             ].map((person, index) => {
               const backgroundColor =
@@ -140,7 +160,7 @@ export default function AboutPage() {
                   key={index}
                   className="bg-white/10 backdrop-blur-md p-6 rounded-lg text-center shadow-lg hover:scale-105 transition-all border border-gray-600 cursor-pointer"
                   style={{ backgroundColor }}
-                  onClick={() => handleMemberClick(person.slug)}
+                  onClick={() => handleMemberClick(person)}
                 >
                   <Image
                     src={person.img}
@@ -158,12 +178,12 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-8">
-            <Link
+            <a
               href="/teams"
               className="inline-block px-8 py-3 bg-[#233564] text-white rounded-lg hover:bg-[#642335] transition-colors duration-300"
             >
               Discover More About Our Team
-            </Link>
+            </a>
           </div>
         </section>
 
@@ -249,6 +269,32 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
+        {/* Team Member Modal */}
+        {selectedMember && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-8 max-w-md w-full border border-gray-600">
+              <div className="text-center">
+                <Image
+                  src={selectedMember.img}
+                  alt={selectedMember.name}
+                  width={96}
+                  height={96}
+                  className="w-24 h-24 mx-auto rounded-full border-4 border-accent mb-3"
+                />
+                <h3 className="text-xl font-bold mb-1">{selectedMember.name}</h3>
+                <p className="text-sm text-gray-400 mb-4">{selectedMember.role}</p>
+                <p className="text-gray-300 text-base">{selectedMember.bio}</p>
+              </div>
+              <button
+                onClick={closePopup}
+                className="mt-6 w-full py-2 bg-[#233564] hover:bg-[#642335] transition-colors rounded-lg"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

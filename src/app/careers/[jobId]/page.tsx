@@ -145,12 +145,9 @@ export default function JobDetailsPage() {
             </p>
             <p>
               <strong>Email:</strong>{" "}
-              <button 
-                onClick={() => window.location.href = `mailto:${randomUser.email}`}
-                className="text-blue-600 hover:underline bg-transparent border-none p-0 cursor-pointer"
-              >
+              <a href={`mailto:${randomUser.email}`} className="text-blue-600">
                 {randomUser.email}
-              </button>
+              </a>
             </p>
             <p>
               <strong>Phone:</strong> {randomUser.phone}
