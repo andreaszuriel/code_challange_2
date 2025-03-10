@@ -1,9 +1,7 @@
 "use client";
 
-import { Metadata } from "next";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const impactStats = [
   { value: "10M+", label: "Trees Planted" },
@@ -53,12 +51,6 @@ const teamMembers = [
     photo: "https://randomuser.me/api/portraits/women/30.jpg"
   }
 ];
-
-export const metadata: Metadata = {
-  title: "Solterra GreenTech | Sustainable Energy Solutions",
-  description: "Pioneering renewable energy technologies for a greener tomorrow. Explore our innovative solutions and join the sustainability revolution.",
-  keywords: ["solar energy", "wind power", "renewable tech", "sustainable solutions"],
-};
 
 export default function Home() {
   const router = useRouter();
